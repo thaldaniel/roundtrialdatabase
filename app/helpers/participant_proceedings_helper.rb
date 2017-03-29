@@ -1,0 +1,2 @@
+module ParticipantProceedingsHelper
+end

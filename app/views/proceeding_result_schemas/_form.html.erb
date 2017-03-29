@@ -1,0 +1,29 @@
+<%= form_for(@proceeding_result_schema) do |f| %>
+  <% if @proceeding_result_schema.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@proceeding_result_schema.errors.count, "error") %> prohibited this proceeding_result_schema from being saved:</h2>
+
+      <ul>
+      <% @proceeding_result_schema.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :proceeding_id %><br>
+    <%= f.number_field :proceeding_id %>
+  </div>
+  <div class="field">
+    <%= f.label :result_schema %><br>
+    <%= f.text_area :result_schema %>
+  </div>
+  <div class="field">
+    <%= f.label :metadata_schema %><br>
+    <%= f.text_area :metadata_schema %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

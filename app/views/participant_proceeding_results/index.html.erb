@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Participant Proceeding Results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Participant proceeding</th>
+      <th>Results</th>
+      <th>Checked</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @participant_proceeding_results.each do |participant_proceeding_result| %>
+      <tr>
+        <td><%= participant_proceeding_result.participant_proceeding %></td>
+        <td><%= participant_proceeding_result.results %></td>
+        <td><%= participant_proceeding_result.checked %></td>
+        <td><%= link_to 'Show', participant_proceeding_result %></td>
+        <td><%= link_to 'Edit', edit_participant_proceeding_result_path(participant_proceeding_result) %></td>
+        <td><%= link_to 'Destroy', participant_proceeding_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Participant proceeding result', new_participant_proceeding_result_path %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Roundtrial:</strong>
+  <%= @proceeding.roundtrial_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @proceeding.name %>
+</p>
+
+<p>
+  <strong>Last Import:</strong>
+  <%= @proceeding.last_import %>
+</p>
+
+<%= link_to 'Edit', edit_proceeding_path(@proceeding) %> |
+<%= link_to 'Back', proceedings_path %>

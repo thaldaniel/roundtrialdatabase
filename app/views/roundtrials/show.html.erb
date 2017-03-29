@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= best_in_place @roundtrial, :name, :as => :input %>
+</p>
+
+<p>
+  <strong>Aktiviert:</strong>
+  <%= best_in_place @roundtrial, :active, as: :checkbox, collection: {false: "Nein", true: "Ja"} %>
+</p>
+
+<p>
+  <strong>Anzahl Teilnehmer: </strong>
+  <%= @roundtrial.participants.count %>
+</p>
+
+<%= link_to 'Teilnehmerliste', "#" %>
+<%= link_to 'Ergebnistabelle', "#" %>
+<%= link_to 'Zurück zur Rundtestübersicht', roundtrials_path %>

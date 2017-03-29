@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  participant_id: 1
+  proceeding_id: 1
+  device_id: 1
+  metadata: MyText
+
+two:
+  participant_id: 1
+  proceeding_id: 1
+  device_id: 1
+  metadata: MyText

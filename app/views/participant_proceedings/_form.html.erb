@@ -1,0 +1,33 @@
+<%= form_for(@participant_proceeding) do |f| %>
+  <% if @participant_proceeding.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@participant_proceeding.errors.count, "error") %> prohibited this participant_proceeding from being saved:</h2>
+
+      <ul>
+      <% @participant_proceeding.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :participant_id %><br>
+    <%= f.number_field :participant_id %>
+  </div>
+  <div class="field">
+    <%= f.label :proceeding_id %><br>
+    <%= f.number_field :proceeding_id %>
+  </div>
+  <div class="field">
+    <%= f.label :device_id %><br>
+    <%= f.number_field :device_id %>
+  </div>
+  <div class="field">
+    <%= f.label :metadata %><br>
+    <%= f.text_area :metadata %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

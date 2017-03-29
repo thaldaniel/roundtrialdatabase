@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rundteste:</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Aktiviert?</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @roundtrials.each do |roundtrial| %>
+      <tr>
+        <td><%= roundtrial.name %></td>
+	<td><% if roundtrial.active %>Ja<% else %>Nein<% end %></td>
+        <td><%= link_to 'Anzeigen', roundtrial %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

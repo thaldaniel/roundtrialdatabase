@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Participant proceeding:</strong>
+  <%= @participant_proceeding_result.participant_proceeding %>
+</p>
+
+<p>
+  <strong>Results:</strong>
+  <%= @participant_proceeding_result.results %>
+</p>
+
+<p>
+  <strong>Checked:</strong>
+  <%= @participant_proceeding_result.checked %>
+</p>
+
+<%= link_to 'Edit', edit_participant_proceeding_result_path(@participant_proceeding_result) %> |
+<%= link_to 'Back', participant_proceeding_results_path %>

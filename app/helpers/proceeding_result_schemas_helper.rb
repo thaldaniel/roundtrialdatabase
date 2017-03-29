@@ -1,0 +1,2 @@
+module ProceedingResultSchemasHelper
+end

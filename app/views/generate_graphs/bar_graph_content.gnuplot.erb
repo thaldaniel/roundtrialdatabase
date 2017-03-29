@@ -1,0 +1,26 @@
+set terminal <%= options[:filetype] %> nocrop enhanced font '<%= options[:font] %>,<%= options[:font_size] %>' size <%= options[:resolution].join(",") %>
+set output '<%= options[:output_path] %>'
+
+<% if options[:title].kind_of?(String) && !options[:title].empty? %>
+set title "<%= options[:title] %>" font "<%= options[:font] %>,<%= options[:title_font_size] %>"
+<% end %>
+set style fill solid
+
+set format x "%.1f"
+set xrange [<%= options[:x_range] %>]
+set xlabel "<%= options[:x_label] %>" font "<%= options[:font] %>,<%= options[:x_label_font_size] %>"
+set xtics <%= options[:x_tics] %>
+set ytics <%= options[:y_tics] %>
+set yrange [<%= options[:y_range] %>]
+set ylabel "<%= options[:y_label] %>" font "<%= options[:font] %>,<%= options[:y_label_font_size] %>"
+set boxwidth <%= (options[:x_tics].split(",")[1].to_f*0.9).to_s %> absolute
+
+set tmargin <%= options[:margin][0] %>
+set rmargin <%= options[:margin][1] %>
+set bmargin <%= options[:margin][2] %>
+set lmargin <%= options[:margin][3] %>
+
+unset key
+
+plot "<%= options[:data_path] %>" using 1:2 with boxes lc rgb "<%= options[:bar_color] %>",\
+"<%= options[:data_path] %>" using 1:($2+0.5):(sprintf('%d', ($2))) with labels

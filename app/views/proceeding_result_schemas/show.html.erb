@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Proceeding:</strong>
+  <%= @proceeding_result_schema.proceeding_id %>
+</p>
+
+<p>
+  <strong>Result schema:</strong>
+  <%= @proceeding_result_schema.result_schema %>
+</p>
+
+<p>
+  <strong>Metadata schema:</strong>
+  <%= @proceeding_result_schema.metadata_schema %>
+</p>
+
+<%= link_to 'Edit', edit_proceeding_result_schema_path(@proceeding_result_schema) %> |
+<%= link_to 'Back', proceeding_result_schemas_path %>

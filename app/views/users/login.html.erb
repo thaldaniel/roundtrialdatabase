@@ -1,0 +1,9 @@
+<div id="login">
+  <%= form_for :login, :url => auth_users_path do |f| %>
+    <%= f.label :name, "Benutzername" %><br />
+    <%= f.text_field :name %><br />
+    <%= f.label :password, "Passwort" %><br />
+    <%= f.password_field :password %><br />
+    <%= f.submit "Anmelden" %>
+  <% end %>
+</div>

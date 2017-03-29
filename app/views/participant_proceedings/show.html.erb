@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Participant:</strong>
+  <%= @participant_proceeding.participant_id %>
+</p>
+
+<p>
+  <strong>Proceeding:</strong>
+  <%= @participant_proceeding.proceeding_id %>
+</p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @participant_proceeding.device_id %>
+</p>
+
+<p>
+  <strong>Metadata:</strong>
+  <%= @participant_proceeding.metadata %>
+</p>
+
+<%= link_to 'Edit', edit_participant_proceeding_path(@participant_proceeding) %> |
+<%= link_to 'Back', participant_proceedings_path %>

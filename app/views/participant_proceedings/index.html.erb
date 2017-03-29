@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Participant Proceedings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Participant</th>
+      <th>Proceeding</th>
+      <th>Device</th>
+      <th>Metadata</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @participant_proceedings.each do |participant_proceeding| %>
+      <tr>
+        <td><%= participant_proceeding.participant_id %></td>
+        <td><%= participant_proceeding.proceeding_id %></td>
+        <td><%= participant_proceeding.device_id %></td>
+        <td><%= participant_proceeding.metadata %></td>
+        <td><%= link_to 'Show', participant_proceeding %></td>
+        <td><%= link_to 'Edit', edit_participant_proceeding_path(participant_proceeding) %></td>
+        <td><%= link_to 'Destroy', participant_proceeding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Participant proceeding', new_participant_proceeding_path %>

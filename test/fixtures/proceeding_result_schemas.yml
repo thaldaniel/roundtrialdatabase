@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  proceeding_id: 1
+  result_schema: MyText
+  metadata_schema: MyText
+
+two:
+  proceeding_id: 1
+  result_schema: MyText
+  metadata_schema: MyText

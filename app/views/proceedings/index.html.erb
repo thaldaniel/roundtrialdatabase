@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Proceedings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Roundtrial</th>
+      <th>Name</th>
+      <th>Last Import</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @proceedings.each do |proceeding| %>
+      <tr>
+        <td><%= proceeding.roundtrial_id %></td>
+        <td><%= proceeding.name %></td>
+        <td><%= proceeding.last_import %></td>
+        <td><%= link_to 'Show', proceeding %></td>
+        <td><%= link_to 'Edit', edit_proceeding_path(proceeding) %></td>
+        <td><%= link_to 'Destroy', proceeding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Proceeding', new_proceeding_path %>

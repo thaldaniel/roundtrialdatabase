@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Proceeding Result Schemas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Proceeding</th>
+      <th>Result schema</th>
+      <th>Metadata schema</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @proceeding_result_schemas.each do |proceeding_result_schema| %>
+      <tr>
+        <td><%= proceeding_result_schema.proceeding_id %></td>
+        <td><%= proceeding_result_schema.result_schema %></td>
+        <td><%= proceeding_result_schema.metadata_schema %></td>
+        <td><%= link_to 'Show', proceeding_result_schema %></td>
+        <td><%= link_to 'Edit', edit_proceeding_result_schema_path(proceeding_result_schema) %></td>
+        <td><%= link_to 'Destroy', proceeding_result_schema, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Proceeding result schema', new_proceeding_result_schema_path %>
