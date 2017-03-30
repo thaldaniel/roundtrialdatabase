@@ -107,12 +107,12 @@ class Proceeding < ActiveRecord::Base
 
   def average_value_by_sample_name(sample_name, field)
     data = self.get_all_result_objects_by_sample_name(sample_name).collect{|x| x.results[field] }
-    data.inject(&:+)/data.count.to_f
+    data.inject(&:+)/data.count.to_f.round(1)
   end
 
   def clean_average_value_by_sample_name(sample_name, field)
     data = self.get_all_result_objects_by_sample_name(sample_name).select{|x| !x.outliers.include?(field.to_sym) }.collect{|x| x.results[field] }
-    data.inject(&:+)/data.count.to_f
+    data.inject(&:+)/data.count.to_f.round(1)
   end
 
   def tableable_summary_of_offsets(fields)
@@ -125,7 +125,7 @@ class Proceeding < ActiveRecord::Base
     sample_names.each do |sample_name|
       average_values[sample_name] = {}
       fields.each do |k,v|
-        average_values[sample_name][v] = self.clean_average_value_by_sample_name(sample_name, v)
+        average_values[sample_name][v] = self.clean_average_value_by_sample_name(sample_name, v).round(1)
         limit_values << self.get_limit_by_sample_name(sample_name, v).to_s
         average_values_raw << self.clean_average_value_by_sample_name(sample_name, v).round(1).to_s
 #        get_limit_by_sample_name
@@ -363,12 +363,12 @@ class Proceeding < ActiveRecord::Base
 
   def sample_average_result_values(sample_name, key)
     data = self.sample_raw_result_values(sample_name, key)
-    data.sum/data.count.to_f
+    data.sum/data.count.to_f.round(1)
   end
 
   def sample_stddev_result_values(sample_name, key)
     data = self.sample_raw_result_values(sample_name, key)
-    avg = data.sum/data.count.to_f
+    avg = data.sum/data.count.to_f.round(1)
     dev = 0.0
     data.map{|x| x.to_f }.each do |x|
       if x < avg
@@ -385,7 +385,7 @@ class Proceeding < ActiveRecord::Base
 
   def clean_sample_stddev_result_values(sample_name, field)
     data = self.clean_sample_raw_result_values(sample_name, field)
-    avg = self.clean_average_value_by_sample_name(sample_name, field)
+    avg = self.clean_average_value_by_sample_name(sample_name, field).round(1)
     dev = 0.0
     data.map{|x| x.to_f }.each do |x|
       if x < avg
