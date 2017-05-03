@@ -21,13 +21,13 @@ class GenerateAlmeterGraph
           :x_label => "Length, #{type.capitalize}, mm", 
           :y_label => "Number of labs", 
           :x_range => "#{limits.min[0]}:#{limits.max[0]}", 
-          :y_range => [0, (limits.map{|k,v| v}.max*1.2).ceil].join(":"), 
+          :y_range => [0, (limits.map{|k,v| v}.max*1.3).ceil].join(":"), 
           :output_path => "#{Rails.root}/graphs/#{proceeding_id}/#{sample_name}/#{type}.png", 
           :y_tics => "5", 
           :x_tics => "#{limits.map{|k,v| k}.min}, #{step_length}",
           :resolution => [1920, 1250]
         },
-        calculate_groups_from_limits(limits)
+        calculate_groups_from_limits(limits, step_length)
       )
       gg.plot
     end
@@ -63,11 +63,11 @@ class GenerateAlmeterGraph
     group_assigned 
   end
 
-  def calculate_groups_from_limits(limits)
+  def calculate_groups_from_limits(limits, step_length, c = 10)
     groups = {}
     limits = limits.map{|k,v| [k,v]}
-    (limits.count-1).times do |i|
-      groups[((limits[i][0]+limits[i+1][0])/2).round(2)] = limits[i][1]
+    c.times do |i|
+      groups[limits.min[0]+(step_length/2)+step_length*i] = limits[i][1]
     end
     groups
   end

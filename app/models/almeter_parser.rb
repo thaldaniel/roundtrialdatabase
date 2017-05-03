@@ -111,7 +111,7 @@ class AlmeterParser
       return false unless validate_userinput?
       if self.xls_data[0][5] == "2016-1"
         lot_start_line = 18
-      elsif self.xls_data[0][5] == "2016-2"
+      elsif (self.xls_data[0][5] == "2016-2") || (self.xls_data[0][5] == "2017-1")
         lot_start_line = 20
       else
         false
@@ -157,7 +157,7 @@ class AlmeterParser
           end
         end
         return true
-      elsif self.xls_data[0][5] == "2016-2"
+      elsif (self.xls_data[0][5] == "2016-2") or (self.xls_data[0][5] == "2017-1")
         return false if (Float(self.xls_data[0][8]) rescue false) == false
         [3,4,5,6,7,8].each do |x|
           [20,21,22,23,25,26,27,28,30,31,32,33,34,35,36,37].each do |y|
@@ -206,7 +206,7 @@ class AlmeterParser
         [4, 5, 6, 7, 8].each do |field|
           almeter_type << [self.xls_data[13][field].gsub(/\n/," "), nil] unless self.xls_data[14][field].nil?
         end
-      elsif self.xls_data[0][5] == "2016-2"
+      elsif (self.xls_data[0][5] == "2016-2") or (self.xls_data[0][5] == "2017-1")
         almeter_type = []
         [3, 5, 7].each do |field|
           almeter_type << [self.xls_data[13][field].gsub(/\n/," "), nil] unless self.xls_data[14][field].nil?
