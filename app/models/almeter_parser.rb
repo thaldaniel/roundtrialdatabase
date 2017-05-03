@@ -2,28 +2,43 @@ class AlmeterParser
   attr_accessor :xls_data, :results, :roundtrial, :proceeding, :test_device, :participant, :participant_proceeding, :file_path, :proceeding_id
 
   def self.parse(data_folder, invalid_folder, valid_folder, proceeding_id)
-    return false unless File.directory?(data_folder)
-    return false unless File.directory?(invalid_folder)
-    return false unless Proceeding.exists?(proceeding_id)
+    puts "[+] Parser started"
+    unless File.directory?(data_folder)
+      puts "[-] data_folder does not exists"
+      return false
+    end
+
+    unless File.directory?(invalid_folder)
+      puts "[-] invalid_folder does not exists"
+      return false
+    end
+ 
+    unless Proceeding.exists?(proceeding_id)
+      puts "[-] proceeding does not exists"
+      return false 
+    end
     proceeding = Proceeding.find(proceeding_id)
 
     if proceeding.last_import.nil?
       last_import = Time.now - 20.years
     else
       last_import = proceeding.last_import
+      puts "[i] Last import at #{last_import}"
     end
 
     import_todo = []
     Dir["#{data_folder}/*.xlsx"].each do |data|
         import_todo << data
     end
+    
+    puts "[i] #{import_todo.count} to import"
 
     import_todo.each do |import_file|
       data_parser = AlmeterParser.new(import_file, proceeding_id)
       unless !data_parser.nil? && data_parser.valid? && data_parser.parse_file
-        FileUtils.mv(import_file, "#{invalid_folder}/#{DateTime.now.to_i}_#{File.basename(import_file)}")
+        FileUtils.mv(import_file, "#{invalid_folder}/#{data_parser.participant.number rescue ""}_#{DateTime.now.to_i}_#{File.basename(import_file)}")
       else
-        FileUtils.mv(import_file, "#{valid_folder}/#{DateTime.now.to_i}_#{File.basename(import_file)}")
+        FileUtils.mv(import_file, "#{valid_folder}/#{data_parser.participant.number}_#{DateTime.now.to_i}_#{File.basename(import_file)}")
       end
     end
     
