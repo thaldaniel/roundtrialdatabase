@@ -298,7 +298,7 @@ class Proceeding < ActiveRecord::Base
     device = self.devices.select {|d| d.name == "Nil" }.first
     device_count += self.device_count(device)
 
-    data << ["Other instruments", self.device_count(device).to_s, "#{self.relative_device_count(device).round(1).to_s}%"]
+#    data << ["Other instruments", self.device_count(device).to_s, "#{self.relative_device_count(device).round(1).to_s}%"]
 
     unless device.nil?
       data << ["No information", self.device_count(device).to_s, "#{self.relative_device_count(device).round(1).to_s}%"]
