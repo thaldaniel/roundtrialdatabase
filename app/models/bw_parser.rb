@@ -7,6 +7,48 @@ class BwParser
     puts "  [+] initialized BwParser: #{file_path}"
   end
 
+  def premier_sheet(sheet)
+  end
+
+  def uster_sheet(sheet)
+  end
+
+  def hvi_sheet(sheet)
+  end
+
+  def fineness_sheet(sheet)
+  end
+
+  def read_length_sheet(sheet)
+  end
+
+  def read_mic_sheet(sheet)
+    lab_number = sheet.rows[2][8]
+    temperature = sheet.rows[5][8]
+    air_moisture = sheet.rows[6][8]
+
+    micronaire_value = sheet.rows[12][2]
+    micronaire_intrument = sheet.rows[11][8]
+    micronaire_std_test_method = sheet.rows[12][8]
+    micronaire_repetitations = sheet.rows[13][8]
+    puts "  [i] LAB_NUMBER: #{lab_number}"
+    puts "  [i] TEMPERATURE: #{temperature}"
+    puts "  [i] AIR_MOISTURE: #{air_moisture}"
+    puts "  [i] MICRONAIRE_VALUE: #{micronaire_value}"
+    puts "  [i] MICRONAIRE_INSTRUMENT: #{micronaire_intrument}"
+    puts "  [i] MICRONAIRE_STD_TEST_METHOD: #{micronaire_std_test_method}"
+    puts "  [i] MICRONAIRE_REPETITATIONS: #{micronaire_repetitations}"
+  end
+
+  def read_sheets
+    self.mic_sheets.each {|s| read_mic_sheet(s)}
+    self.length_sheets.each {|s| read_length_sheet(s)}
+    self.fineness_sheets.each {|s| read_fineness_sheet(s)}
+    self.hvi_sheets.each {|s| read_hvi_sheet(s)}
+    self.uster_sheets.each {|s| read_uster_sheet(s)}
+    self.premier_sheets.each {|s| read_premier_sheet(s)}
+  end
+
   def classify_sheets
     self.mic_sheets = []
     self.length_sheets = []
@@ -14,6 +56,7 @@ class BwParser
     self.hvi_sheets = []
     self.uster_sheets = []
     self.premier_sheets = []
+
     self.xls_file.sheets.each do |sheet|
       case sheet.rows[5][0]
         when "MICRONAIRE, BUNDLE TENACITY, - STRAIN" then
