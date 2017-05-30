@@ -1,5 +1,5 @@
 class BwParser
-  attr_accessor :file_path, :roundtrial_id, :roundtrial, :xls_file, :mic_sheets, :length_sheets, :fineness_sheets, :hvi_sheets, :uster_sheets, :premier_sheets
+  attr_accessor :file_path, :roundtrial_id, :roundtrial, :xls_file, :mic_sheets, :length_sheets, :fineness_sheets, :hvi_sheets, :uster_sheets, :premier_sheets, :participant
 
   def initialize(file_path, proceeding_id)
     self.file_path = file_path
@@ -87,6 +87,86 @@ class BwParser
     gravimetric_fineness_std_test_method = sheet.rows[37][8]
     gravimetric_fineness_repetitions = sheet.rows[38][8]
 
+    return if(lab_number.empty?)
+    self.participant = Participant.find_or_create_by(:number => lab_number, :roundtrial_id => roundtrial.id)
+
+    unless (!iic_fineness.empty? || !iic_mat.empty? || !iic_pm.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :fineness => iic_fineness,
+          :mat => iic_mat,
+          :pm => iic_pm,
+          :instrument => iic_instrument,
+          :std_test_method => iic_std_test_method,
+          :repetitions => iic_repetitions
+        }
+      }
+      create_ppr(data, "iic")
+    end
+
+    unless (!fibrograph_value.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :value => fibrograph_value,
+          :instrument => fibrograph_instument,
+          :std_test_method => fibrograph_std_test_method,
+          :repetitions => fibrograph_repetitions
+        }
+      }
+      create_ppr(data, "iic")
+    end
+
+    unless (!causticaire_value.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :value => causticaire_value,
+          :instrument => causticaire_instrument,
+          :std_test_method => causticaire_std_test_method,
+          :repetitions => causticaire_repetitions
+        }
+      }
+      create_ppr(data, "causticaire")
+    end
+
+    unless (!microscope_astm.empty? || !microscope_bs.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :bs => microscope_bs,
+          :astm => microscope_astm,
+          :instrument => microscope_instrument,
+          :std_test_method => microscope_std_test_method,
+          :repetitions => microscope_repetitions
+        }
+      }
+      create_ppr(data, "microscope")
+    end
+
+    unless (!gravimetric_fineness_value.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :value => gravimetric_fineness_value,
+          :std_test_method => gravimetric_fineness_std_test_method,
+          :repetitions => gravimetric_fineness_repetitions
+        }
+      }
+      create_ppr(data, "gravimetric")
+    end
+
     puts "  [i] LAB_NUMBER: #{lab_number}"
     puts "  [i] TEMPERATURE: #{temperature}"
     puts "  [i] AIR_MOISTURE: #{air_moisture}"
@@ -130,14 +210,62 @@ class BwParser
     comb_sorter_std_test_method = sheet.rows[30][8]
     comb_sorter_repetitions = sheet.rows[31][8]
 
+    return if(lab_number.empty?)
+    self.participant = Participant.find_or_create_by(:number => lab_number, :roundtrial_id => roundtrial.id)
 
-    puts "  [i] LAB_NUMBER: #{lab_number}"
-    puts "  [i] TEMPERATURE: #{temperature}"
-    puts "  [i] AIR_MOISTURE: #{air_moisture}"
-    puts "  [i] #{''.upcase}: #{}"
+    #TODO FIBROGRAPH
+    unless (!almeter_ml_n.empty? || !almeter_ml_w.empty? || !almeter_cv_n.empty? || !almeter_cv_w.empty? || !almeter_sfc_n.empty? || !almeter_sfc_w.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :ml_n => almeter_ml_n,
+          :ml_w => almeter_ml_w,     
+          :cv_n => almeter_cv_n,
+          :cv_w => almeter_cv_w,
+          :sfc_n => almeter_sfc_n,
+          :sfc_w => almeter_sfc_w,
+          :instrument => almeter_instrument,
+          :std_test_method => almeter_std_test_method,
+          :repetitions => almeter_repetitions
+        }
+      }
+      create_ppr(data, "almeter")
+    end
+
+    unless (!comb_sorter_ml_n.empty? || !comb_sorter_ml_w.empty? || !comb_sorter_cv_n.empty? || !comb_sorter_cv_w.empty? || !comb_sorter_sfc_n.empty? || !comb_sorter_sfc_w.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :ml_n => comb_sorter_ml_n,
+          :ml_w => comb_sorter_ml_w,
+          :cv_n => comb_sorter_cv_n,
+          :cv_w => comb_sorter_cv_w,
+          :sfc_n => comb_sorter_sfc_n,
+          :sfc_w => comb_sorter_sfc_w,
+          :instrument => comb_sorter_instrument,
+          :std_test_method => comb_sorter_std_test_method,
+          :repetitions => comb_sorter_repetitions
+        }
+      }
+      create_ppr(data, "comb_sorter")
+    end
+  end
+
+  def create_ppr(data, result_type)
+    p = Proceeding.find_or_create_by(:roundtrial_id => roundtrial.id, :name => result_type)
+    pp = ParticipatProceeding.find_or_create_by(:participant_id => self.participant.id, :proceeding_id => p.id)
+    ppr = ParticipantProceedingResutls.new
+    ppr.checked = false
+    ppr.results = data
+    ppr.save
   end
 
   def read_mic_sheet(sheet)
+
     lab_number = sheet.rows[2][8]
     temperature = sheet.rows[5][8]
     air_moisture = sheet.rows[6][8]
@@ -145,33 +273,65 @@ class BwParser
     micronaire_value = sheet.rows[12][2]
     micronaire_intrument = sheet.rows[11][8]
     micronaire_std_test_method = sheet.rows[12][8]
-    micronaire_repetitations = sheet.rows[13][8]
+    micronaire_repetitions = sheet.rows[13][8]
 
     pressley_tester_pi0 = sheet.rows[20][2]
     pressley_tester_pi32 = sheet.rows[21][2]
     pressley_tester_std_test_method = sheet.rows[20][8]
-    pressley_tester_repetitations = sheet.rows[21][8]
+    pressley_tester_repetitions = sheet.rows[21][8]
 
     stelometer_tenacity = sheet.rows[28][2]
     stelometer_strain = sheet.rows[29][2]
     stelometer_std_test_method = sheet.rows[28][8]
     stelometer_repetitions = sheet.rows[29][8]
 
-    puts "  [i] LAB_NUMBER: #{lab_number}"
-    puts "  [i] TEMPERATURE: #{temperature}"
-    puts "  [i] AIR_MOISTURE: #{air_moisture}"
-    puts "  [i] MICRONAIRE_VALUE: #{micronaire_value}"
-    puts "  [i] MICRONAIRE_INSTRUMENT: #{micronaire_intrument}"
-    puts "  [i] MICRONAIRE_STD_TEST_METHOD: #{micronaire_std_test_method}"
-    puts "  [i] MICRONAIRE_REPETITATIONS: #{micronaire_repetitations}"
-    puts "  [i] #{'pressley_tester_pi0'.upcase}: #{pressley_tester_pi0}"
-    puts "  [i] #{'pressley_tester_pi32'.upcase}: #{pressley_tester_pi32}"
-    puts "  [i] #{'pressley_tester_std_test_method'.upcase}: #{pressley_tester_std_test_method}"
-    puts "  [i] #{'pressley_tester_repetitations'.upcase}: #{pressley_tester_repetitations}"
-    puts "  [i] #{'stelometer_tenacity'.upcase}: #{stelometer_tenacity}"
-    puts "  [i] #{'stelometer_strain'.upcase}: #{stelometer_strain}"
-    puts "  [i] #{'stelometer_std_test_method'.upcase}: #{stelometer_std_test_method}"
-    puts "  [i] #{'stelometer_repetitions'.upcase}: #{stelometer_repetitions}"
+    return if(lab_number.empty?)
+    self.participant = Participant.find_or_create_by(:number => lab_number, :roundtrial_id => roundtrial.id)
+
+    unless (micronaire_value.empty?)
+      data = {
+             :lab_number => lab_number,
+             :lab_temperature => temperature,
+             :lab_airmoisture => air_moisture,
+             :result_data => {
+               :value => micronaire_value,
+               :instrument => micronaire_intrument,
+               :std_test_method => micronaire_std_test_method,
+               :repetitions => micronaier_repetitions
+             }
+           }
+      create_ppr(data, "micronaire")
+    end
+
+    if(!pressley_tester_pi0.empty? || pressley_tester_pi32.empty?)
+      data = {
+             :lab_number => lab_number,
+             :lab_temperature => temperature,
+             :lab_airmoisture => air_moisture,
+             :result_data => {
+               :pi0 => pressley_tester_pi0,
+               :pi32 => pressley_tester_pi32,
+               :std_test_method => pressley_tester_std_test_method,
+               :repetitions => pressley_tester_repetitions
+             }
+           }
+      create_ppr(data, "pressley_tester")
+    end
+    
+    if(!stelometer_tenacity.empty? && !stelometer_strain.empty?)
+      data = {
+        :lab_number => lab_number,
+        :lab_temperature => temperature,
+        :lab_airmoisture => air_moisture,
+        :result_data => {
+          :tenacity => stelometer_tenacity,
+          :strain => stelometer_strain,
+          :std_test_method => stelometer_std_test_method,
+          :repetitions => stelometer_repetitions
+        }
+      }
+      create_ppr(data, "stelometer_tenacity")
+    end
   end
 
   def read_sheets
